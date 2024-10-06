@@ -1,3 +1,4 @@
+import Header from "@/components/Header";
 import Image from "next/image";
 import React from "react";
 
@@ -55,8 +56,8 @@ const outlets = [
 export default function Page() {
   return (
     <>
-      <div>Select Outlets</div>
-
+      {/* <div>Select Outlets</div> */}
+      <Header />
       <section className="flex justify-center">
         <div
           style={{ width: "90%" }}
