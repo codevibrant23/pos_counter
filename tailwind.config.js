@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import { nextui } from "@nextui-org/react";
+import { divider, nextui } from "@nextui-org/react";
 
 module.exports = {
   content: [
@@ -12,9 +12,15 @@ module.exports = {
     defaultTheme: "light", // default theme from the themes object
     defaultExtendTheme: "light",
     extend: {
+      boxShadow: {
+        primary: "0px 4px 4px 0px rgba(255, 102, 0, 0.4)", // or '0px 4px 4px 0px theme("colors.primary.100")'
+        "inset-custom": "inset 0px 4px 4px rgba(0, 0, 0, 0.25)", // Adjust opacity as needed
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        default: "#000000",
+        divider: "#000000",
         primary: {
           DEFAULT: "#FF6600", // Default primary color
           50: "rgba(255, 102, 0, 0.1)", // lightest rgba
@@ -32,6 +38,9 @@ module.exports = {
           DEFAULT: "#FAAE62",
         },
         accent: {
+          DEFAULT: "#FF6600", // Default accent color
+        },
+        focus: {
           DEFAULT: "#FF6600", // Default accent color
         },
         lightGreen: {
