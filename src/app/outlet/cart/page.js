@@ -62,7 +62,7 @@ export default function page() {
         >
           {/* Adjust max-height as needed */}
           {cartItems.length > 0 ? (
-            cartItems.map((cartItem) => <CartItem data={cartItem} />)
+            cartItems.map((cartItem,i) => <CartItem data={cartItem} key={i} />)
           ) : (
             <div>No items in the cart</div> // Show message if cart is empty
           )}
