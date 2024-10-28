@@ -1,4 +1,3 @@
-// RaiseTicketModal.js
 "use client"; // Important for Next.js App Router and Next UI
 
 import React from "react";
@@ -52,15 +51,18 @@ export default function RequestStock() {
                   <IoMdClose size={20} strokeWidth={8} />
                 </Button>
               </ModalHeader>
-              <ModalBody className="flex flex-col">
+              <ModalBody className="flex flex-col gap-1">
+                <div className="text-primary text-xl font-semibold">
+                  Products
+                </div>
                 <Input
+                  name="products"
+                  radius="sm"
                   type="text"
                   color="primary"
+                  size="lg"
                   variant="bordered"
-                  label="Subject"
-                  labelPlacement="outside"
                   placeholder="Enter your text here"
-                  defaultValue="junior@nextui.org"
                   className="w-full"
                   classNames={{
                     label: "text-lg",
@@ -72,7 +74,7 @@ export default function RequestStock() {
                   }
                 />
 
-                <div className="flex-grow w-full rounded-md min-h-72 flex flex-wrap gap-3">
+                <div className="flex-grow w-full rounded-md min-h-72 flex flex-wrap gap-3 mt-3">
                   <div className="bg-white  w-32 h-20 rounded-xl text-white bg-gradient-to-t from-primary-500 to-primary-100 flex justify-between items-center p-2">
                     <div className="text-lg font-medium leading-tight">
                       {" "}
@@ -90,13 +92,13 @@ export default function RequestStock() {
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center">
-                <Button color="danger" variant="light" onPress={onClose}>
+                {/* <Button color="danger" variant="light" onPress={onClose}>
                   Close
-                </Button>
+                </Button> */}
                 <Button
                   color="primary"
                   onPress={onClose}
-                  className="w-52 rounded-2xl font-bold text-xl"
+                  className="w-64 rounded-2xl font-bold text-2xl"
                 >
                   Request Stock
                 </Button>

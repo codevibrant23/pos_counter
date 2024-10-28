@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react";
+import { Button, Link } from "@nextui-org/react";
 import Image from "next/image";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
@@ -68,6 +68,8 @@ export default function page() {
             </div>
             <div className="flex flex-col justify-end space-y-4 w-[100%] lg:w-[50%]">
               <Button
+                href="/orderList"
+                as={Link}
                 className="flex justify-between items-center w-full bg-white hover:bg-[var(--background)] text-black border-2 border-[#FF6600] rounded-[10px] px-0 pl-6 py-3 text-lg font-medium"
                 endContent={
                   <div className="bg-[#FAAE62] rounded p-2">
@@ -81,6 +83,8 @@ export default function page() {
                 View Orders
               </Button>
               <Button
+                href="/profile/printers"
+                as={Link}
                 className="flex justify-between items-center w-full bg-white hover:bg-[var(--background)] text-black border-2 border-[#FF6600] rounded-[10px] px-0 pl-6 py-3 text-lg font-medium"
                 endContent={
                   <div className="bg-[#FAAE62] rounded p-2">

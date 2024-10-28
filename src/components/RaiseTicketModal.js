@@ -1,5 +1,4 @@
-// RaiseTicketModal.js
-"use client"; // Important for Next.js App Router and Next UI
+"use client";
 
 import React from "react";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
@@ -52,34 +51,36 @@ export default function RaiseTicketModal() {
                   <IoMdClose size={20} strokeWidth={8} />
                 </Button>
               </ModalHeader>
-              <ModalBody className="flex flex-col">
+              <ModalBody className="flex flex-col gap-3">
                 <Input
                   type="text"
                   color="primary"
                   label="Subject"
+                  size="lg"
                   labelPlacement="outside"
                   placeholder="Enter your text here"
                   defaultValue="junior@nextui.org"
                   className="w-full"
                   classNames={{
-                    label: "text-lg",
-                    inputWrapper: "py-8 border-black placeholder:text-gray-900",
+                    label: "text-primary text-xl ",
+                    inputWrapper: "border-black placeholder:text-gray-900",
                   }}
                 />
                 <Input
                   type="text"
                   color="primary"
+                  size="lg"
                   label="Description"
                   labelPlacement="outside"
                   placeholder="Enter your text here"
                   defaultValue="junior@nextui.org"
                   className="w-full mt-4"
                   classNames={{
-                    label: "text-lg",
-                    inputWrapper: "py-8 border-black placeholder:text-gray-900",
+                    label: "text-primary text-xl",
+                    inputWrapper: "border-black placeholder:text-gray-900",
                   }}
                 />
-                <div className="text-primary text-lg">Add Attachment</div>
+                <div className="text-primary text-xl">Add Attachment</div>
                 <div
                   className="bg-primary-50 flex-grow w-full rounded-md min-h-72 flex justify-center items-center"
                   //   style={{
@@ -94,13 +95,13 @@ export default function RaiseTicketModal() {
                 </div>
               </ModalBody>
               <ModalFooter className="flex justify-center">
-                <Button color="danger" variant="light" onPress={onClose}>
+                {/* <Button color="danger" variant="light" onPress={onClose}>
                   Close
-                </Button>
+                </Button> */}
                 <Button
                   color="primary"
                   onPress={onClose}
-                  className="w-52 rounded-2xl font-bold text-xl"
+                  className="w-64 rounded-2xl font-bold text-2xl"
                 >
                   Raise
                 </Button>

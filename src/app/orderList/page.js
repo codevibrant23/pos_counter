@@ -25,7 +25,6 @@ const OrderTable = () => {
 
   return (
     <>
-      <Header />
       <div className="w-full max-w-4xl mx-auto my-5 p-4 bg-[#fff9f2] border border-[#FF6600] rounded-lg">
       <div className="w-full max-w-4xl flex justify-end mb-5">
         <div className="relative w-full max-w-md">

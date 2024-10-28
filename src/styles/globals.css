@@ -21,7 +21,10 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 16px; /* Width of the scrollbar */
+  width: 8px; /* Width of the scrollbar */
+
+  /* For Firefox */
+  scrollbar-width: thin; /* Use thin scrollbar */
 }
 
 ::-webkit-scrollbar-track {
@@ -29,17 +32,16 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #ff6600; /* Color of the scrollbar thumb */
+  background-color: #f5decf; /* Color of the scrollbar thumb */
   border-radius: 10px; /* Rounded corners for the scrollbar thumb */
+
+  /* For Firefox */
+  scrollbar-color: #ff6600 rgba(255, 246, 201, 1);
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #ff8019; /* Color on hover */
 }
-
-/* For Firefox */
-scrollbar-width: thin; /* Use thin scrollbar */
-scrollbar-color: #ff6600 rgba(255, 246, 201, 1);
 
 /* styles/globals.css */
 .scrollbar-hidden {
@@ -52,10 +54,10 @@ scrollbar-color: #ff6600 rgba(255, 246, 201, 1);
 
 .custom-modal {
   background: white;
-  box-shadow: 0px 10px 6px 0px #FF660040;
+  box-shadow: 0px 10px 6px 0px #ff660040;
 }
 
 .custom-backdrop {
-  background: #FFFFFFE5;
+  background: #ffffffe5;
   backdrop-filter: blur(12px);
 }

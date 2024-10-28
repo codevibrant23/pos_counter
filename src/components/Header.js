@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { Avatar, AvatarIcon, Button, Tooltip } from "@nextui-org/react";
+import { Avatar, AvatarIcon, Button, Link, Tooltip } from "@nextui-org/react";
 import { BiChevronLeft } from "react-icons/bi";
 import { usePathname, useRouter } from "next/navigation";
 import { extendStringPrototype } from "@/util/stringExtensions";
@@ -16,9 +16,9 @@ export default function Header({ title }) {
     [pathname, title]
   );
   return (
-    <header className="p-4 flex justify-between items-center">
+    <header className="p-4 px-6 flex justify-between items-center">
       <div className="flex justify-start items-center gap-4">
-        <Tooltip content="Go back">
+        <Tooltip content="Go back" closeDelay={0} showArrow>
           <Button
             color="primary"
             radius="full"
@@ -31,16 +31,20 @@ export default function Header({ title }) {
         </Tooltip>
         <div className="font-normal text-3xl">{pageTitle}</div>
       </div>
-      <Avatar
-        // showFallback
-        // name="Test"
-        icon={<AvatarIcon />}
-        classNames={{
-          base: "bg-gradient-to-tr from-[#FFB457]  to-primary",
-          icon: "text-black/80",
-        }}
-        // src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-      />
+      <Tooltip content="Profile" placement="left" closeDelay={0} showArrow>
+        <Link href="/profile">
+          <Avatar
+            // showFallback
+            // name="Test"
+            icon={<AvatarIcon />}
+            classNames={{
+              base: "bg-gradient-to-tr from-[#FFB457]  to-primary",
+              icon: "text-black/80",
+            }}
+            // src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
+          />
+        </Link>
+      </Tooltip>
     </header>
   );
 }

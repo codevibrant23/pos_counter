@@ -18,8 +18,8 @@ const modeBtnStyles =
 
 export default function page() {
   return (
-    <div className="px-6 flex">
-      <div className="w-3/4 mt-10 mr-2">
+    <div className="px-6 flex gap-3">
+      <div className="w-1/2 md:w-2/3 xl:w-3/4 mt-10 mr-2">
         <div className="text-3xl">Categories</div>
         <ScrollShadow
           className="w-full h-36"
@@ -36,21 +36,27 @@ export default function page() {
 
         <div className="text-3xl mb-6">Burger</div>
         {/* Product Cards Container */}
-        <div
-          className=" flex flex-wrap gap-3 overflow-y-auto flex-grow"
-          style={{ maxHeight: "calc(100vh - 380px)", minHeight: "300px" }}
+        <ScrollShadow
+          className="w-full flex-grow "
+          hideScrollBar
+          // orientation="horizontal"
         >
-          {/* Set max height and overflow */}
-          {dummyProductData.map((d, i) => (
-            <ProductCard data={d} key={i} />
-          ))}
-        </div>
+          <div
+            className=" flex flex-wrap gap-3 "
+            style={{ maxHeight: "calc(100vh - 380px)", minHeight: "300px" }}
+          >
+            {/* Set max height and overflow */}
+            {dummyProductData.map((d, i) => (
+              <ProductCard data={d} key={i} />
+            ))}
+          </div>
+        </ScrollShadow>
       </div>
 
-      <div className="w-1/4 p-5 py-7 bg-secondary rounded-3xl flex flex-col">
+      <div className="w-1/2 md:w-1/3 xl:w-1/4 p-5 py-7 bg-secondary rounded-3xl flex flex-col">
         <h2 className="text-2xl font-semibold mb-4 text-white">Cart</h2>
 
-        <div className="flex gap-2 py-2">
+        <div className="flex gap-2 py-2 flex-wrap">
           <Button className={modeBtnStyles}>Dine-In</Button>
           <Button className={modeBtnStyles}>Takeaway</Button>
           <Button className={modeBtnStyles}>Delivery</Button>
@@ -62,7 +68,7 @@ export default function page() {
         >
           {/* Adjust max-height as needed */}
           {cartItems.length > 0 ? (
-            cartItems.map((cartItem,i) => <CartItem data={cartItem} key={i} />)
+            cartItems.map((cartItem, i) => <CartItem data={cartItem} key={i} />)
           ) : (
             <div>No items in the cart</div> // Show message if cart is empty
           )}
@@ -151,7 +157,7 @@ const CategoryCard = ({ data }) => {
 const ProductCard = ({ data }) => {
   const { name, price, isVeg, available, preparationTime } = data;
   return (
-    <div className="w-52 sm:w-56 md:w-60 lg:w-62 h-auto bg-gradient-to-b from-primary-50 to-primary-100 rounded-3xl shadow-inset-custom p-5 text-center">
+    <div className="flex-grow min-w-40 w-52 max-w-62 h-auto bg-gradient-to-b from-primary-50 to-primary-100 rounded-3xl shadow-inset-custom p-5 text-center">
       <div className="text-primary font-bold text-xl">{name}</div>
       <div className="flex justify-between mt-2">
         <div>{isVeg ? "Veg" : "Non-veg"}</div>
@@ -169,33 +175,37 @@ const CartItem = ({ data }) => {
   return (
     <div
       key={id}
-      className="flex justify-between mb-4 text-black font-bold items-center"
+      className="flex justify-between gap-4 md:gap-6 lg:gap-8 mb-4 text-black font-bold items-center"
     >
-      <div className="flex gap-4">
-        <div className="rounded-xl relative overflow-hidden w-24 h-24">
+      <div className="flex items-center gap-4 md:gap-6">
+        <div className="rounded-xl relative overflow-hidden w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24">
           <Image src={image} fill />
         </div>
-        <div className="flex flex-col justify-between py-1">
+        <div className="flex flex-col justify-between items-center">
           <div>
-            <div>{name}</div>
-            <div>${price}</div>
+            <div className="text-sm sm:text-base md:text-lg lg:text-xl">
+              {name}
+            </div>
+            <div className="text-xs sm:text-sm md:text-base lg:text-lg">
+              ${price}
+            </div>
           </div>
-          <div className="flex gap-4 items-center ">
+          <div className="flex gap-2 md:gap-4 items-center">
             <Button color="primary" size="sm" radius="sm" isIconOnly>
-              <BiPlus size={20} color="black" />
+              <BiPlus size={20} className="sm:text-lg lg:text-xl" />
             </Button>
-            <div>{quantity}</div>
+            <div className="text-sm md:text-base lg:text-lg">{quantity}</div>
             <Button color="primary" size="sm" radius="sm" isIconOnly>
-              <BiMinus size={15} color="black" />
+              <BiMinus size={15} className="sm:text-lg lg:text-xl" />
             </Button>
           </div>
         </div>
       </div>
-      <div>
+      <div className="mt-2 md:mt-0">
         <Button isIconOnly variant="light" color="danger">
           <RiDeleteBin6Line
-            size={25}
-            className="text-primary-700"
+            size={20}
+            className="sm:text-lg md:text-xl lg:text-2xl text-primary-700"
             strokeWidth={0.1}
           />
         </Button>
@@ -233,7 +243,7 @@ const cartItems = [
   },
 ];
 
-const dummyProductData = Array.from({ length: 25 }, (_, index) => ({
+const dummyProductData = Array.from({ length: 35 }, (_, index) => ({
   id: index + 1,
   name: `Dish ${index + 1}`,
   price: (Math.random() * 50 + 10).toFixed(2), // Random price between $10 and $60
