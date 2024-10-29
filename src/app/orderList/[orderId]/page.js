@@ -13,7 +13,6 @@ const OrderDetails = ({ order }) => {
 
   return (
     <>
-      <Header />
       <div
         className={`max-w-4xl mx-auto bg-[#fff9f2] border ${borderColor} rounded-lg p-6`}
       >
