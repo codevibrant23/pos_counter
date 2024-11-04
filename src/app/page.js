@@ -32,7 +32,7 @@ export default function Home() {
             </div>
           </div>
           <div className="w-full md:w-1/2 p-4">
-            <Card className="md:h-[70vh] rounded-[60px]">
+            <Card className="rounded-[60px]">
               <CardBody className="md:pt-24 pb-10 px-8 md:px-12 bg-[var(--background)] border-0 !border-none flex flex-col">
                 <h2 className="font-medium text-4xl md:text-5xl my-8 text-center md:text-left">
                   Sign in
