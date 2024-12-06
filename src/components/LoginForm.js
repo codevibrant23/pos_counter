@@ -5,22 +5,25 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 export default function LoginForm() {
   const [isVisible, setIsVisible] = useState(false);
-  const [email, setEmail] = useState("");
+  const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const router = useRouter();
 
   const toggleVisibility = () => setIsVisible(!isVisible);
 
-  const validateEmail = (email) => {
+  const validateEmail = (username) => {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return re.test(String(email).toLowerCase());
+    return re.test(String(username).toLowerCase());
   };
-
+  
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
     if (!validateEmail(e.target.value)) {
@@ -28,44 +31,61 @@ export default function LoginForm() {
     } else {
       setEmailError(false);
     }
-    // setEmailError(
-    //   validateEmail(e.target.value) ? "" : ""
-    // );
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    router.push("/outlet");
-    // if (validateEmail(email) && password) {
-    //   try {
-    //     const response = await fetch("https://test.com/login", {
-    //       method: "POST",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify({ email, password }),
-    //     });
-    //     response.ok ? console.log("Login successful") : setEmailError(true);
-    //   } catch (error) {
-    //     console.error("Error:", error);
-    //   }
-    // }
+    setSubmitError("");
+    if (!validateEmail(username)) {
+      setEmailError(true);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/counter/api/login/`,
+        {
+          username,
+          password,
+        }
+      );
+      Cookies.set("authToken", response.data.token, {
+        expires: 7,
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      });
+      Cookies.set("userDetails", JSON.stringify(response.data.user_details), {
+        expires: 7, 
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+      });
+      router.push("/outlet");
+    } catch (error) {
+      setSubmitError(
+        error.response?.data?.detail || "Login failed. Please try again."
+      );
+      setLoading(false);
+    }
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex flex-col gap-2">
         <div>
           <p className="mb-2 font-normal">
-            Enter your username or email address
+            Enter your username or username address
           </p>
           <Input
-            type="email"
+            type="username"
             size="lg"
             radius="md"
-            placeholder="Email"
+            placeholder="username"
             variant="bordered"
-            value={email}
+            value={username}
             onChange={handleEmailChange}
             isInvalid={emailError}
             errorMessage="Please enter a valid email address"
@@ -127,6 +147,9 @@ export default function LoginForm() {
             </Link>
           </div>
         </div>
+        {submitError && (
+          <div className="text-red-500 text-sm mb-2">{submitError}</div>
+        )}
       </div>
       <Button
         radius="md"
