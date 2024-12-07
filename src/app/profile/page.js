@@ -1,11 +1,13 @@
+'use client'
 import { Button, Link } from "@nextui-org/react";
 import Image from "next/image";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import RaiseTicketModal from "@/components/RaiseTicketModal";
 import RequestStock from "@/components/RequestStock";
 import StockOut from "@/components/StockOut";
+import Cookies from "js-cookie";
 
 const menuItems = [
   "View Orders",
@@ -14,7 +16,35 @@ const menuItems = [
   "Stock Out",
   "Raise Ticket",
 ];
+
 export default function page() {
+  const [userDetails, setUserDetails] = useState({
+    name: "Loading...",
+    employeeId: "Loading...",
+    mobileNumber: "Loading...",
+    profileImageUrl: "/media/mask.png",
+  });
+
+  useEffect(() => {
+    try {
+      const storedUserDetails = Cookies.get("userDetails");
+
+      if (storedUserDetails) {
+        const parsedUserDetails = JSON.parse(storedUserDetails);
+        setUserDetails((prevDetails) => ({
+          ...prevDetails,
+          ...parsedUserDetails,
+        }));
+      }
+    } catch (error) {
+      console.error("Error retrieving user details from cookies:", error);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    Cookies.remove("userDetails");
+    
+  };
   return (
     <>
       <section className="flex w-full justify-center">
@@ -54,15 +84,19 @@ export default function page() {
               >
                 <div className="flex justify-between px-5 text-[#FF6600] border border-[#BF4F04] rounded-[10px]">
                   <span>Name</span>
-                  <span>Agasthya Verma</span>
+                  <span>{userDetails.name}</span>
                 </div>
                 <div className="flex justify-between px-5 text-[#FF6600] border border-[#BF4F04] rounded-[10px]">
                   <span>EMPLOYEE ID</span>
-                  <span>ABCDE123456</span>
+                  <span>{userDetails.id}</span>
+                </div>
+                <div className="flex justify-between px-5 text-[#FF6600] border border-[#BF4F04] rounded-[10px]">
+                  <span>EMAIL</span>
+                  <span>{userDetails.email}</span>
                 </div>
                 <div className="flex justify-between px-5 text-[#FF6600] border border-[#BF4F04] rounded-[10px]">
                   <span>MOBILE NO.</span>
-                  <span>+91 1234567890</span>
+                  <span>{userDetails.mobileNumber}</span>
                 </div>
               </div>
             </div>

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import styles from "@/styles/cart.module.css";
 import {
   Button,
@@ -12,11 +13,43 @@ import { BiMinus, BiPlus } from "react-icons/bi";
 import Image from "next/image";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { IoReceiptOutline } from "react-icons/io5";
+import axios from "axios";
 
 const modeBtnStyles =
   "bg-primary-100 text-white font-bold hover:text-black active:text-black hover:bg-primary active:bg-primary border border-primary rounded-lg";
 
 export default function page() {
+  const [categoriesData, setCategoriesData] = useState([]);
+  const [productData, setProductData] = useState([]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/counter/api/get-categories/`
+        );
+        if (!res.data.error) {
+          setCategoriesData(res.data.categories);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    const fetchProdcts = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/counter/api/products/`
+        );
+        if (!res.data.error) {
+          setProductData(res.data.products);
+        }
+      } catch (error) {
+        console.error("Error fetching Products:", error);
+      }
+    };
+
+    fetchCategories();
+    fetchProdcts();
+  }, []);
   return (
     <div className="px-6 flex gap-3">
       <div className="w-1/2 md:w-2/3 xl:w-3/4 mt-10 mr-2">
@@ -28,9 +61,7 @@ export default function page() {
         >
           {/* Adjust height as needed */}
           <div className="py-6 flex gap-3">
-            {dummyData.map((d, i) => (
-              <CategoryCard data={d} key={i} />
-            ))}
+            <CategoryCard categoriesData={categoriesData} />
           </div>
         </ScrollShadow>
 
@@ -41,12 +72,9 @@ export default function page() {
           hideScrollBar
           // orientation="horizontal"
         >
-          <div
-            className=" flex flex-wrap gap-3 "
-            style={{ maxHeight: "calc(100vh - 380px)", minHeight: "300px" }}
-          >
+          <div className=" flex flex-wrap gap-3 " style={{ height: "auto" }}>
             {/* Set max height and overflow */}
-            {dummyProductData.map((d, i) => (
+            {productData.map((d, i) => (
               <ProductCard data={d} key={i} />
             ))}
           </div>
@@ -145,26 +173,38 @@ export default function page() {
     </div>
   );
 }
-const CategoryCard = ({ data }) => {
-  const { name, count } = data;
+const CategoryCard = ({ categoriesData }) => {
   return (
-    <div className={styles.categoryCard}>
-      <div className="text-lg font-medium">{name}</div>
-      <div>{count} items</div>
+    <div>
+      {categoriesData.map((category, index) => {
+        return (
+          <div className={styles.categoryCard} key={index}>
+            <div className="text-lg font-medium">{category}</div>
+          </div>
+        );
+      })}
     </div>
   );
 };
+
 const ProductCard = ({ data }) => {
-  const { name, price, isVeg, available, preparationTime } = data;
+  const { id, name, price, image_url, description } = data;
   return (
     <div className="flex-grow min-w-40 w-52 max-w-62 h-auto bg-gradient-to-b from-primary-50 to-primary-100 rounded-3xl shadow-inset-custom p-5 text-center">
+      {image_url && (
+        <div className="mb-4">
+          <Image
+            src={image_url}
+            alt={name}
+            width={150}
+            height={150}
+            className="mx-auto rounded-xl"
+          />
+        </div>
+      )}
       <div className="text-primary font-bold text-xl">{name}</div>
+      <div className="text-sm text-gray-600 mb-2">{description}</div>
       <div className="flex justify-between mt-2">
-        <div>{isVeg ? "Veg" : "Non-veg"}</div>
-        <div>{available ? "Available" : "Not-available"}</div>
-      </div>
-      <div className="flex justify-between mt-2">
-        <div>{preparationTime}</div>
         <div>Rs. {price}/-</div>
       </div>
     </div>
