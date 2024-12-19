@@ -37,7 +37,7 @@ const OrderTable = () => {
           setOutletId(outletId);
 
           const res = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/counter/api/orders/${outletId}/get-orders/`
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/counter/api/orders/${outletId}/get-orders/`
           );
 
           if (!res.data.error) {

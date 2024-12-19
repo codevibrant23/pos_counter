@@ -20,7 +20,7 @@ const OrderDetails = () => {
         setIsLoading(true);
         // Make the API call with the orderId
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/counter/api/orders/${orderId}`
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/counter/api/orders/${orderId}`
         );
         setOrder(response.data); // Assuming the API returns the order data directly
       } catch (err) {

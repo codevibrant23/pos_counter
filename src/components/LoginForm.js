@@ -23,7 +23,7 @@ export default function LoginForm() {
     const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return re.test(String(username).toLowerCase());
   };
-  
+
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
     if (!validateEmail(e.target.value)) {
@@ -42,13 +42,14 @@ export default function LoginForm() {
       setLoading(false);
       return;
     }
-
+    
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/counter/api/login/`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/counter/api/login/`,
         {
           username,
           password,
+          role:"pos_staff",
         }
       );
       Cookies.set("authToken", response.data.token, {
@@ -58,7 +59,7 @@ export default function LoginForm() {
         sameSite: "strict",
       });
       Cookies.set("userDetails", JSON.stringify(response.data.user_details), {
-        expires: 7, 
+        expires: 7,
         path: "/",
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
