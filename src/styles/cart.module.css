@@ -2,5 +2,9 @@
   @apply bg-white text-primary border border-primary min-w-32 h-20 rounded-xl 
            hover:text-white hover:border-none active:bg-gradient-to-t 
            hover:shadow-primary hover:bg-gradient-to-t from-primary to-primary-100 
-           flex flex-col justify-center items-center gap-2;
+           flex flex-col justify-center items-center gap-2 cursor-pointer;
+}
+.activeCategory {
+  @apply bg-gradient-to-t from-primary to-primary-100 text-white border-none 
+         shadow-primary hover:shadow-md font-bold;
 }

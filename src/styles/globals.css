@@ -28,7 +28,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background); /* Background color of the scrollbar track */
+  background: transparent; /* Background color of the scrollbar track */
 }
 
 ::-webkit-scrollbar-thumb {
