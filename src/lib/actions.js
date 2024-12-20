@@ -27,8 +27,7 @@ export const postOrder = async (values) => {
   }
 };
 
-export const printKOT = async (orderNo) => {
-  // const outlet = 1;
+export const printKOT = async (orderNo = 1) => {0
   let endpoint = `/counter/api/orders/${orderNo}/print-kot/`;
   try {
     const data = await fetch(baseUrl + endpoint, {

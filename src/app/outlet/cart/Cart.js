@@ -14,11 +14,10 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { IoReceiptOutline } from "react-icons/io5";
-import PersonIcon from "./PersonIcon";
 import CartItem from "./CartItem";
 import { useCart } from "@/lib/Context/CartContext";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { postOrder } from "@/lib/actions";
+import { postOrder, printKOT } from "@/lib/actions";
 import usePrintJS from "@/lib/Hooks/PrintHook";
 
 const modeBtnStyles =
@@ -110,6 +109,19 @@ export default function Cart() {
           handlePrint(res).then(() => {
             handleClear();
             onOpenChange();
+          });
+          printKOT().then((res) => {
+            console.log(res);
+            if (res?.error) {
+              console.error("Order failed:", res.detail);
+              alert(`Order failed: ${res.detail}`);
+            } else {
+              alert("Order placed successfully!");
+              handlePrint(res).then(() => {
+                handleClear();
+                onOpenChange();
+              });
+            }
           });
         }
         setError(null);
