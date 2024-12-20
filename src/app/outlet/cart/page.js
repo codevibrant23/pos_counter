@@ -189,9 +189,9 @@ export default function Page() {
 
           <div className="form-group">
             <Input
-              label="Table Number"
+              label="Phone Number"
               labelPlacement="outside"
-              placeholder="Enter your table number"
+              placeholder="Enter your phone number"
               fullWidth
               variant="bordered"
               aria-label="table-number"

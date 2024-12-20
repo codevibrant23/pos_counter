@@ -49,7 +49,7 @@ export default function LoginForm() {
         {
           username,
           password,
-          role:"pos_staff",
+          role:"pos_staff"
         }
       );
       Cookies.set("authToken", response.data.token, {
