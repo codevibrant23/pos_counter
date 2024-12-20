@@ -110,10 +110,11 @@ const VariantsDialog = ({ isOpen, onOpenChange, data }) => {
               </RadioGroup>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="flat" onPress={onClose}>
+              <Button color="danger" variant="flat" onPress={onClose} size="lg">
                 Cancel
               </Button>
               <Button
+                size="lg"
                 color="primary"
                 onPress={handleAddToCart}
                 isDisabled={!selectedVariant}

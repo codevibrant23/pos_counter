@@ -100,29 +100,30 @@ export default function Cart() {
 
     try {
       await postOrder(orderData).then((res) => {
-        console.log(res);
+        // console.log(res);
         if (res?.error) {
           console.error("Order failed:", res.detail);
           alert(`Order failed: ${res.detail}`);
         } else {
           alert("Order placed successfully!");
-          handlePrint(res).then(() => {
-            handleClear();
-            onOpenChange();
-          });
-          printKOT().then((res) => {
-            console.log(res);
-            if (res?.error) {
-              console.error("Order failed:", res.detail);
-              alert(`Order failed: ${res.detail}`);
-            } else {
-              alert("Order placed successfully!");
-              handlePrint(res).then(() => {
-                handleClear();
-                onOpenChange();
-              });
-            }
-          });
+          handlePrint(res)
+            .then(() => {
+              return printKOT();
+            })
+            .then((res) => {
+              // console.log(res);
+              if (res?.error) {
+                console.error("KOT Post failed:", res.detail);
+                alert(`KOT Post failed: ${res.detail}`);
+              } else {
+                // alert("Order placed successfully!");
+                handlePrint(res).then(() => {
+                  handleClear();
+                  onOpenChange();
+                  window.location.reload();
+                });
+              }
+            });
         }
         setError(null);
         setLoading(false);

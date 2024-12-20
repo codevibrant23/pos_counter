@@ -5,7 +5,7 @@ const baseUrl = process.env.baseURL;
 export const postOrder = async (values) => {
   const outlet = 1;
   let endpoint = `/v1/counter/api/orders/${outlet}/place-order/`;
-  console.log(baseUrl + endpoint);
+  // console.log(baseUrl + endpoint);
   try {
     const data = await fetch(baseUrl + endpoint, {
       method: "POST",
@@ -27,8 +27,9 @@ export const postOrder = async (values) => {
   }
 };
 
-export const printKOT = async (orderNo = 1) => {0
-  let endpoint = `/counter/api/orders/${orderNo}/print-kot/`;
+export const printKOT = async (orderNo = 1) => {
+  0;
+  let endpoint = `/v1/counter/api/orders/${orderNo}/print-kot/`;
   try {
     const data = await fetch(baseUrl + endpoint, {
       method: "POST",
@@ -39,11 +40,11 @@ export const printKOT = async (orderNo = 1) => {0
       cache: "no-store",
     });
     const res = await data.text();
-    console.log(res);
+    // console.log(res);
     // if (res?.error) {
     //   throw new Error(res?.detail);
     // }
-    return res.categories;
+    return res;
   } catch (e) {
     throw new Error(e.message ?? "Error placing order. Internal Server Error!");
   }

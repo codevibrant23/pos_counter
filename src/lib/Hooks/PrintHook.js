@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 const usePrintJS = () => {
-  const handlePrint = useCallback((htmlContent) => {
+  const handlePrint = (htmlContent) => {
     if (typeof window === "undefined") {
       // Prevent execution on the server
       console.error("usePrintJS can only be used in the browser.");
@@ -29,7 +29,7 @@ const usePrintJS = () => {
         reject(error);
       }
     });
-  }, []);
+  };
 
   return handlePrint;
 };
