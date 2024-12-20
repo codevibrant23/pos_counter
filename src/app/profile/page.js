@@ -1,4 +1,5 @@
 'use client'
+
 import { Button, Link } from "@nextui-org/react";
 import Image from "next/image";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
@@ -17,7 +18,7 @@ const menuItems = [
   "Raise Ticket",
 ];
 
-export default function page() {
+export default function Page() {
   const [userDetails, setUserDetails] = useState({
     name: "Loading...",
     employeeId: "Loading...",
