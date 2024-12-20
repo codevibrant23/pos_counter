@@ -19,6 +19,7 @@ import { useCart } from "@/lib/Context/CartContext";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { postOrder, printKOT } from "@/lib/actions";
 import usePrintJS from "@/lib/Hooks/PrintHook";
+import EmptyCartIcon from "./EmptyCartIcon";
 
 const modeBtnStyles =
   "bg-primary-100 text-white font-bold hover:text-black active:text-black hover:bg-primary active:bg-primary border border-primary rounded-lg";
@@ -200,7 +201,13 @@ export default function Cart() {
             />
           ))
         ) : (
-          <div>No items in the cart</div>
+          <div className="flex w-full h-72 items-center justify-center flex-col text-center text-gray-500">
+            <EmptyCartIcon className="w-12 h-12" />
+            <p className="text-lg font-medium mt-10">No Items in Cart !</p>
+            <p className="text-sm mt-2">
+              The cart is empty. Add items to see them here.
+            </p>
+          </div>
         )}
       </div>
 

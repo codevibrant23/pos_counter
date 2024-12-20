@@ -9,7 +9,7 @@ import Products from "./Products";
 export default async function Page({ searchParams }) {
   return (
     <div className="px-6 flex gap-3 h-[90vh]">
-      <div className="w-1/2 md:w-2/3 xl:w-3/4 mt-10 mr-2 overflow-auto">
+      <div className="w-1/2 md:w-2/3 xl:w-3/4 mt-6 mr-2 overflow-auto">
         <div className="text-3xl">Categories</div>
         <ScrollShadow
           className="w-full h-36"
