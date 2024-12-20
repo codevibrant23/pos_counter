@@ -8,20 +8,20 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
 const OrderTable = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const searchQuery = searchParams.get("search") || "";
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
+  // const searchQuery = searchParams.get("search") || "";
 
-  const [outletId, setOutletId] = useState();
+  // const [outletId, setOutletId] = useState();
   const [orders, setOrders] = useState([]);
 
   // Step 2: Filter orders based on the search input (case-insensitive)
-  const filteredOrders =
-    orders.length > 0
-      ? orders.filter((order) =>
-          order.id.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-      : [];
+  // const filteredOrders =
+  //   orders.length > 0
+  //     ? orders.filter((order) =>
+  //         order.id.toLowerCase().includes(searchQuery.toLowerCase())
+  //       )
+  //     : [];
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -33,17 +33,17 @@ const OrderTable = () => {
         const parsedUserDetails = userDetails ? JSON.parse(userDetails) : null;
         const outletId = parsedUserDetails?.outletId;
         // Check if outletId exists before making the API call
-        if (outletId) {
-          setOutletId(outletId);
+        // if (outletId) {
+        //   setOutletId(outletId);
 
-          const res = await axios.get(
-            `${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/counter/api/orders/${outletId}/get-orders/`
-          );
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/counter/api/orders/1/get-orders/`
+        );
 
-          if (!res.data.error) {
-            setOrders(res.data.orders);
-          }
+        if (!res.data.error) {
+          setOrders(res.data.orders);
         }
+        // }
       } catch (error) {
         console.error("Error fetching Orders:", error);
       }
@@ -52,23 +52,23 @@ const OrderTable = () => {
     fetchOrders();
   }, []);
 
-  const handleSearchChange = (e) => {
-    const searchValue = e.target.value;
+  // const handleSearchChange = (e) => {
+  //   const searchValue = e.target.value;
 
-    // Update URL with search query
-    const current = new URLSearchParams(Array.from(searchParams.entries()));
+  //   // Update URL with search query
+  //   const current = new URLSearchParams(Array.from(searchParams.entries()));
 
-    if (searchValue) {
-      current.set("search", searchValue);
-    } else {
-      current.delete("search");
-    }
+  //   if (searchValue) {
+  //     current.set("search", searchValue);
+  //   } else {
+  //     current.delete("search");
+  //   }
 
-    // Update the URL without causing a full page reload
-    const search = current.toString();
-    const queryString = search ? `?${search}` : "";
-    router.push(`${window.location.pathname}${queryString}`);
-  };
+  //   // Update the URL without causing a full page reload
+  //   const search = current.toString();
+  //   const queryString = search ? `?${search}` : "";
+  //   router.push(`${window.location.pathname}${queryString}`);
+  // };
 
   return (
     <>
@@ -82,8 +82,8 @@ const OrderTable = () => {
             <input
               type="text"
               placeholder="Search order no."
-              value={searchQuery} // Bind the search input to state
-              onChange={handleSearchChange} // Update the URL with search query
+              // value={searchQuery} // Bind the search input to state
+              // onChange={handleSearchChange} // Update the URL with search query
               className="w-full pl-10 pr-4 py-2 border border-[#FF6600] rounded-full bg-white text-gray-600 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#FF6600] focus:border-transparent"
             />
           </div>
@@ -104,26 +104,30 @@ const OrderTable = () => {
           </thead>
           <tbody>
             {/* Step 4: Map the filtered orders to display them */}
-            {filteredOrders.length > 0 ? (
-              filteredOrders.map((order, index) => (
+            {orders.length > 0 ? (
+              orders.map((order, index) => (
                 <tr
                   key={index}
                   className="border-0 cursor-pointer"
                   onClick={() =>
-                    (window.location = `/orderList/order-${order.id}`)
-                  }
+                    (window.location = `/orderList/order-${order.order_number}`)
+                  } // Use order_number instead of order.id
                 >
-                  <td className="py-4 font-semibold">{order.id}</td>
-                  <td className="py-4 font-semibold">{order.date}</td>
+                  <td className="py-4 font-semibold">{order.order_number}</td>{" "}
+                  {/* Map to order_number */}
+                  <td className="py-4 font-semibold">
+                    {new Date(order.order_date).toLocaleString()}
+                  </td>{" "}
+                  {/* Map to order_date and format it */}
                   <td className="py-4 flex align-center justify-center">
                     <button
                       className={`${
                         order.status === "Completed"
                           ? "bg-green-200 text-green-900"
                           : "bg-orange-200 text-orange-900"
-                      } rounded-full p-3 text-sm font-semibold flex flex-row gap-3  w-[120px] justify-between`}
+                      } rounded-full p-3 text-sm font-semibold flex flex-row gap-3 w-[120px] justify-between`}
                     >
-                      {order.status}
+                      {order.status} {/* Map to status */}
                       <Image
                         src={"/media/right.svg"}
                         width={20}
@@ -132,6 +136,8 @@ const OrderTable = () => {
                       />
                     </button>
                   </td>
+                  {/* <td className="py-4 font-semibold">{order.total_price}</td>
+                  <td className="py-4 font-semibold">{order.mode}</td> */}
                 </tr>
               ))
             ) : (
