@@ -64,7 +64,7 @@ export default function LoginForm() {
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
       });
-      router.push("/outlet");
+      router.push("/outlet/cart");
     } catch (error) {
       setSubmitError(
         error.response?.data?.detail || "Login failed. Please try again."

@@ -19,13 +19,14 @@ import CartItem from "./CartItem";
 import { useCart } from "@/lib/Context/CartContext";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { postOrder } from "@/lib/actions";
+import usePrintJS from "@/lib/Hooks/PrintHook";
 
 const modeBtnStyles =
   "bg-primary-100 text-white font-bold hover:text-black active:text-black hover:bg-primary active:bg-primary border border-primary rounded-lg";
 
 export default function Cart() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
+  const handlePrint = usePrintJS();
   const [selectedMode, setSelectedMode] = useState(""); // Track the selected mode
   const [loading, setLoading] = useState(false);
   const [confirmLoading, setConfirmloading] = useState(false);
@@ -84,7 +85,7 @@ export default function Cart() {
     // e.preventDefault();
     setLoading(true);
 
-    const data = {
+    const orderData = {
       customer: {
         name: formValues.name || "Default customer",
         phone_number: formValues.phone_number || "9999999999",
@@ -98,17 +99,29 @@ export default function Cart() {
       address: "Heritage School Sec-62, Gurugram, Haryana",
     };
 
-    await postOrder(data).then((res) => {
-      console.log(res);
-      if (res?.error) {
-        setError(res?.detail);
-        alert(res?.detail);
-        return;
-      }
-      setError(null);
-      setLoading(false);
-      setConfirmloading(false);
-    });
+    try {
+      await postOrder(orderData).then((res) => {
+        console.log(res);
+        if (res?.error) {
+          console.error("Order failed:", res.detail);
+          alert(`Order failed: ${res.detail}`);
+        } else {
+          alert("Order placed successfully!");
+          handlePrint(res).then(() => {
+            handleClear();
+            onOpenChange();
+          });
+        }
+        setError(null);
+        setLoading(false);
+        setConfirmloading(false);
+      });
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert(
+        "An unexpected error occurred while placing the order. Please try again."
+      );
+    }
   };
   const handleClear = () => {
     setFormValues({
