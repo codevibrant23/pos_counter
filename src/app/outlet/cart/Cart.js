@@ -87,7 +87,7 @@ export default function Cart() {
 
     const orderData = {
       customer: {
-        name: formValues.name || "Default customer",
+        name: formValues.name || "Heritage",
         phone_number: formValues.phone_number || "9999999999",
       },
       items: cartItems.map((item) => {
