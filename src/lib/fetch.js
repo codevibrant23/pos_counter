@@ -31,7 +31,7 @@ export const getCategories = async () => {
 export const getProducts = async () => {
   const outlet = 1;
   let endpoint = `/v1/counter/api/products/`;
-  console.log(baseUrl + endpoint);
+  // console.log(baseUrl + endpoint);
   // if (category) endpoint += `?category=${category}`;
   try {
     const data = await fetch(baseUrl + endpoint, {

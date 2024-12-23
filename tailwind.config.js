@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import { divider, nextui } from "@nextui-org/react";
+import { nextui } from "@nextui-org/react";
 
 module.exports = {
   content: [
@@ -19,7 +19,7 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        default: "#000000",
+        // default: "#000000",
         divider: "#000000",
         primary: {
           DEFAULT: "#FF6600", // Default primary color

@@ -1,20 +1,14 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Card,
   Divider,
   Input,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
   Select,
   SelectItem,
   Spacer,
-  useDisclosure,
 } from "@nextui-org/react";
 import { IoReceiptOutline } from "react-icons/io5";
 import CartItem from "./CartItem";
@@ -24,6 +18,7 @@ import { postOrder, printKOT } from "@/lib/actions";
 import usePrintJS from "@/lib/Hooks/PrintHook";
 import EmptyCartIcon from "./EmptyCartIcon";
 import { useRouter } from "next/navigation";
+import clsx from "clsx";
 
 const modeBtnStyles =
   "bg-primary-100 text-white font-bold hover:text-black active:text-black hover:bg-primary active:bg-primary border border-primary rounded-lg";
@@ -36,18 +31,14 @@ export default function Cart() {
   const formInit = {
     name: "",
     phone_number: "",
-    payment_mode: "coupon",
   };
+  const payment_modes = [
+    { key: "cash", label: "Cash", disabled: false },
+    { key: "card", label: "Card", disabled: false },
+    { key: "coupon", label: "Coupon", disabled: true },
+  ];
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const [formValues, setFormValues] = useState(formInit);
-  const payment_modes = [{ key: "coupon", label: "Coupon" }];
-
-  // const {
-  //   cart: cartItems,
-  //   addToCart,
-  //   totalAmount,
-  //   removeFromCart,
-  //   clearCart,
-  // } = useCart();
 
   const {
     cart: cartItems,
@@ -95,7 +86,7 @@ export default function Cart() {
         name: formValues.name || "Heritage",
         phone_number: formValues.phone_number || "9999999999",
       },
-      mode: formValues.payment_mode,
+      mode: paymentMethod,
       address: "Heritage School Sec-62, Gurugram, Haryana",
       items: cartItems.map((item) => {
         if (item.variant_id) {
@@ -103,7 +94,7 @@ export default function Cart() {
         } else return { product: item.id, quantity: item.quantity };
       }),
     };
-
+    
     try {
       await postOrder(orderData).then((res) => {
         // console.log(res);
@@ -139,6 +130,7 @@ export default function Cart() {
   };
   const handleClear = () => {
     setFormValues(formInit);
+    setPaymentMethod("cash");
     setError(false);
     setLoading(false);
     clearCart();
@@ -208,32 +200,7 @@ export default function Cart() {
       <Divider className="border-gray-300" />
       <Spacer y={2} />
 
-      <Card className="px-6 py-4">
-        <Select
-          label="Payment Mode"
-          items={payment_modes}
-          // value={formValues.mode}
-          // defaultSelectedKeys={["coupon"]}
-          // onChange={(e) =>
-          //   setFormValues({ ...formValues, payment_mode: e.target.value })
-          // }
-          // fullWidth
-          variant="bordered"
-          // aria-label="payment_mode"
-          classNames={{
-            mainWrapper:
-              "border-primary rounded-lg placeholder:text-gray-400 text-gray-800 shadow-sm focus:ring-2 focus:ring-primary focus:border-primary",
-          }}
-        >
-          {(m) => <SelectItem>{m.label}</SelectItem>}
-        </Select>
-      </Card>
-      <Spacer y={2} />
-
-      <form
-        onSubmit={handleSubmit}
-        className="space-y-2 p-6 bg-white rounded-2xl shadow-lg border border-gray-200"
-      >
+      <form onSubmit={handleSubmit}>
         {/* <div className="flex justify-center gap-4 px-4 items-center mb-6">
           <PersonIcon strokeWidth={0.1} size={20} className="text-primary" />
           <h2 className="text-2xl font-semibold text-gray-800">
@@ -241,78 +208,138 @@ export default function Cart() {
           </h2>
         </div> */}
         {/* Name Field */}
-        <div className="form-group">
-          <label htmlFor="name" className="text-base font-medium text-gray-800">
-            Name
-          </label>
-          <Input
-            id="name"
-            name="name"
-            value={formValues.name}
-            onChange={(e) =>
-              setFormValues({ ...formValues, name: e.target.value })
-            }
-            placeholder="Enter your name"
-            fullWidth
-            variant="bordered"
-            aria-label="name"
-            classNames={{
-              inputWrapper:
-                "py-4 px-4 border-primary rounded-lg placeholder:text-gray-400 text-gray-800 shadow-sm focus:ring-2 focus:ring-primary focus:border-primary",
-            }}
-          />
-        </div>
+        <Card className="p-2 bg-white">
+          <div className="flex justify-between gap-2">
+            {payment_modes.map((p, index) => {
+              const isSelected = paymentMethod === p.key;
+              const isDisabled = p.disabled;
 
-        {/* Phone Number Field */}
-        <div className="form-group">
-          <label
-            htmlFor="phone_number"
-            className="text-base font-medium text-gray-800"
-          >
-            Phone Number
-          </label>
-          <Input
-            id="phone_number"
-            type="number"
-            name="phone_number"
-            value={formValues.phone_number}
-            onChange={(e) =>
-              setFormValues({ ...formValues, phone_number: e.target.value })
-            }
-            placeholder="Enter your phone number"
-            fullWidth
-            variant="bordered"
-            aria-label="phone_number"
-            classNames={{
-              inputWrapper:
-                "py-4 px-4 border-primary rounded-lg placeholder:text-gray-400 text-gray-800 shadow-sm focus:ring-2 focus:ring-primary focus:border-primary",
-            }}
-          />
-        </div>
+              return (
+                <div
+                  tabIndex={isDisabled ? -1 : 0} // Make focusable only if not disabled
+                  className={clsx(
+                    "w-1/3 border-2 h-10 rounded-lg text-center flex justify-center items-center font-semibold transition-all", // Base styles
+                    {
+                      "border-primary text-primary cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary":
+                        !isSelected && !isDisabled, // Default state with focus
+                      "bg-primary text-white border-primary cursor-pointer focus:outline-none focus:ring-2 focus:ring-white":
+                        isSelected, // Selected state with focus
+                      "border-gray-600 text-gray-600 cursor-not-allowed opacity-70":
+                        isDisabled, // Disabled state (no focus)
+                    }
+                  )}
+                  onClick={() => !isDisabled && setPaymentMethod(p.key)} // Prevent click if disabled
+                  key={index}
+                >
+                  {p.label}
+                </div>
+              );
+            })}
+          </div>
 
-        {/* Buttons */}
-        <div className="flex gap-2 pt-2">
-          <Button
-            type="submit"
-            auto
-            color="primary"
-            className="w-full py-3 text-lg font-semibold text-white bg-primary rounded-lg shadow-md focus:ring-2 focus:ring-primary focus:outline-none transition-colors duration-150 disabled:opacity-50"
-            isLoading={loading}
-            isDisabled={cartItems.length === 0}
-          >
-            Place Order
-          </Button>
-          <Button
-            type="button"
-            auto
-            color="primary"
+          {/* <Select
+            label="Payment Mode"
+            items={payment_modes}
+            selectedKeys={formValues.mode}
+            // disableAnimation={true}
+            disallowEmptySelection={true}
+            selectionMode="single"
+            defaultSelectedKeys={[payment_modes[0].key]}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+            fullWidth
+            itemHeight={40}
             variant="bordered"
-            className="w-full py-3 text-lg font-semibold text-primary border-primary bg-white rounded-lg shadow-md hover:bg-primary-50 focus:ring-2 focus:ring-primary focus:outline-none transition-colors duration-150"
-            onClick={handleClear}
-            isDisabled={loading}
+            style={{
+              "--select-hover-bg-color": "gray", // Replace with your desired color
+            }}
+            classNames={{
+              popoverContent: "shadow-lg",
+              mainWrapper:
+                "rounded-lg focus:ring-2 focus:ring-primary focus:border-primary",
+            }}
           >
-            Cancel
-          </Button>
+            {(m) => <SelectItem>{m.label}</SelectItem>}
+          </Select> */}
+        </Card>
+
+        <Spacer y={2} />
+        <div className="space-y-2 p-5 bg-white rounded-2xl shadow-lg border border-gray-200">
+          <div className="form-group">
+            <label
+              htmlFor="name"
+              className="text-base font-medium text-gray-800"
+            >
+              Name
+            </label>
+            <Input
+              id="name"
+              name="name"
+              value={formValues.name}
+              onChange={(e) =>
+                setFormValues({ ...formValues, name: e.target.value })
+              }
+              placeholder="Enter your name"
+              fullWidth
+              variant="bordered"
+              aria-label="name"
+              classNames={{
+                inputWrapper:
+                  "py-4 px-4 border-primary rounded-lg placeholder:text-gray-400 text-gray-800 shadow-sm focus:ring-2 focus:ring-primary focus:border-primary",
+              }}
+            />
+          </div>
+
+          {/* Phone Number Field */}
+          <div className="form-group">
+            <label
+              htmlFor="phone_number"
+              className="text-base font-medium text-gray-800"
+            >
+              Phone Number
+            </label>
+            <Input
+              id="phone_number"
+              type="number"
+              name="phone_number"
+              value={formValues.phone_number}
+              onChange={(e) =>
+                setFormValues({ ...formValues, phone_number: e.target.value })
+              }
+              placeholder="Enter your phone number"
+              fullWidth
+              variant="bordered"
+              aria-label="phone_number"
+              classNames={{
+                inputWrapper:
+                  "py-4 px-4 border-primary rounded-lg placeholder:text-gray-400 text-gray-800 shadow-sm focus:ring-2 focus:ring-primary focus:border-primary",
+              }}
+            />
+          </div>
+
+          {/* Buttons */}
+          <div className="flex gap-2 pt-2">
+            <Button
+              type="submit"
+              auto
+              color="primary"
+              className="w-full py-3 text-lg font-semibold text-white bg-primary rounded-lg shadow-md focus:ring-2 focus:ring-primary focus:outline-none transition-colors duration-150 disabled:opacity-50"
+              isLoading={loading}
+              isDisabled={cartItems.length === 0}
+            >
+              Place Order
+            </Button>
+            <Button
+              type="button"
+              auto
+              color="primary"
+              variant="bordered"
+              className="w-full py-3 text-lg font-semibold text-primary border-primary bg-white rounded-lg shadow-md hover:bg-primary-50 focus:ring-2 focus:ring-primary focus:outline-none transition-colors duration-150"
+              onPress={handleClear}
+              isDisabled={loading}
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
       </form>
     </>

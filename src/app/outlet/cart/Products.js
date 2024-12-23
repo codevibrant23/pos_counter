@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import ProductCard from "./ProductCard";
 import {
   Modal,
@@ -13,7 +13,7 @@ import {
   RadioGroup,
   VisuallyHidden,
   useRadio,
-  cn
+  cn,
 } from "@nextui-org/react";
 import { useCart } from "@/lib/Context/CartContext";
 import { useSearchParams } from "next/navigation";

@@ -22,18 +22,12 @@ export default async function Page({ searchParams }) {
             <Categories activeCategory={searchParams.s} />
           </Suspense>
         </ScrollShadow>
-        {/* <div className="mb-6">
-          <div className="text-3xl">Menu</div>
-          {!!searchParams.s && (
-            <span className="text-lg text-gray-500">{searchParams.s}</span>
-          )}
-        </div> */}
 
         <Suspense fallback={<ProductSkeleton />}>
           <ProductSection category={searchParams.s} />
         </Suspense>
       </div>
-      <div className="w-1/2 md:w-1/3 xl:w-1/4 p-5 py-7 bg-secondary rounded-3xl flex flex-col h-full">
+      <div className="w-1/2 md:w-1/3 xl:w-1/4 p-5 bg-secondary rounded-3xl flex flex-col h-full">
         <Cart />
       </div>
     </div>
@@ -86,24 +80,22 @@ const CategorySkeleton = () => (
 );
 
 export const ProductSkeleton = () => (
-  <ScrollShadow className="w-full flex-grow" hideScrollBar>
-    <div className="flex flex-wrap gap-3">
-      {[...Array(5)].map((_, index) => (
-        <Card key={index}>
-          <div
-            className="w-[250px] space-y-6 p-4  flex flex-col items-center"
-            radius="lg"
-            key={index}
-          >
-            <Skeleton className="w-4/5 rounded-lg">
-              <div className="h-3 w-4/5 rounded-lg bg-default-200" />
-            </Skeleton>
-            <Skeleton className="w-2/5 rounded-lg">
-              <div className="h-3 w-2/5 rounded-lg bg-default-300" />
-            </Skeleton>
-          </div>
-        </Card>
-      ))}
-    </div>
-  </ScrollShadow>
+  <div className="flex flex-wrap gap-3 w-full flex-grow">
+    {[...Array(5)].map((_, index) => (
+      <Card key={index}>
+        <div
+          className="w-[250px] space-y-6 p-4 flex flex-col items-center shadow-none"
+          radius="lg"
+          key={index}
+        >
+          <Skeleton className="w-4/5 rounded-lg">
+            <div className="h-3 w-4/5 rounded-lg bg-default-200" />
+          </Skeleton>
+          <Skeleton className="w-2/5 rounded-lg">
+            <div className="h-3 w-2/5 rounded-lg bg-default-300" />
+          </Skeleton>
+        </div>
+      </Card>
+    ))}
+  </div>
 );
