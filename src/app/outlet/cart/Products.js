@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ProductCard from "./ProductCard";
 import {
   Modal,
@@ -11,17 +11,31 @@ import {
   Button,
   useDisclosure,
   RadioGroup,
-  Radio,
   VisuallyHidden,
   useRadio,
-  cn,
+  cn
 } from "@nextui-org/react";
 import { useCart } from "@/lib/Context/CartContext";
+import { useSearchParams } from "next/navigation";
+import { ProductSkeleton } from "./page";
 
 export default function Products({ productData }) {
   const { addItem } = useCart();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [selectedItem, setSelectedItem] = useState();
+  const [loading, setLoading] = useState(false);
+
+  const searchParams = useSearchParams();
+  const category = searchParams.get("s");
+
+  const filteredData = useMemo(() => {
+    setLoading(true); // Start loading
+    const data = !category
+      ? productData
+      : productData.filter((i) => i.category_name === category);
+    setTimeout(() => setLoading(false), 300); // Simulate loading time
+    return data;
+  }, [category, productData]);
 
   const handleItem = (data) => {
     if (data.variants && data.variants.length > 0) {
@@ -31,6 +45,7 @@ export default function Products({ productData }) {
       addItem(data);
     }
   };
+
   return (
     <>
       <VariantsDialog
@@ -38,10 +53,26 @@ export default function Products({ productData }) {
         data={selectedItem}
         onOpenChange={onOpenChange}
       />
-      {productData.length > 0 ? (
-        productData.map((d, i) => (
-          <ProductCard data={d} key={i} onClick={() => handleItem(d)} />
-        ))
+      {loading ? (
+        <ProductSkeleton />
+      ) : filteredData?.length > 0 ? (
+        filteredData.map(
+          ({ category_name, items, category_id }) =>
+            items.length > 0 && (
+              <div className="mb-6" key={category_id} id={category_name}>
+                <div className="text-3xl mb-3">{category_name}</div>
+                <div className="flex flex-wrap gap-3">
+                  {items.map((item, j) => (
+                    <ProductCard
+                      data={item}
+                      key={j}
+                      onClick={() => handleItem(item)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )
+        )
       ) : (
         <div>No products available</div>
       )}
@@ -88,6 +119,7 @@ const VariantsDialog = ({ isOpen, onOpenChange, data }) => {
       isOpen={isOpen}
       placement="top-center"
       onOpenChange={onOpenChange}
+      disableAnimation={true}
       size="lg"
     >
       <ModalContent>

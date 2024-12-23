@@ -44,9 +44,9 @@ const CartItem = ({ data, onAdd, onRemove, itemDelete }) => {
           size="sm"
           radius="sm"
           isIconOnly
-          onClick={onAdd}
+          onClick={onRemove}
         >
-          <BiPlus size={18} />
+          <BiMinus size={18} />
         </Button>
         <div className="text-md font-medium rounded-full bg-background h-7 w-7 flex items-center justify-center">
           {quantity}
@@ -56,9 +56,9 @@ const CartItem = ({ data, onAdd, onRemove, itemDelete }) => {
           size="sm"
           radius="sm"
           isIconOnly
-          onClick={onRemove}
+          onClick={onAdd}
         >
-          <BiMinus size={18} />
+          <BiPlus size={18} />
         </Button>
       </div>
       <Divider orientation="vertical" style={{ height: "20px" }} />

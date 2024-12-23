@@ -28,23 +28,24 @@ export const getCategories = async () => {
   }
 };
 
-export const getProducts = async (category) => {
+export const getProducts = async () => {
   const outlet = 1;
   let endpoint = `/v1/counter/api/products/`;
-  if (category) endpoint += `?category=${category}`;
+  console.log(baseUrl + endpoint);
+  // if (category) endpoint += `?category=${category}`;
   try {
     const data = await fetch(baseUrl + endpoint, {
       method: "GET",
       headers: {
         "Content-type": "application/json",
       },
-      next: { tags: ["products", `products-${category}`] },
+      next: { tags: ["products"] },
       cache: "no-store",
     });
     const res = await data.json();
 
     if (!res.error) {
-      return res.products;
+      return res.categories;
     } else {
       throw new Error(res.message || "Error fetching products");
     }

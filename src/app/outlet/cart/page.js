@@ -1,10 +1,12 @@
 import React, { Suspense } from "react";
-import { ScrollShadow } from "@nextui-org/react";
+import { Card, ScrollShadow, Skeleton } from "@nextui-org/react";
 import ProductCard from "./ProductCard";
 import { getCategories, getProducts } from "@/lib/fetch";
 import Cart from "./Cart";
-import CategoryCard, { AllCategory } from "./CategoryCard";
 import Products from "./Products";
+import Link from "next/link";
+import styles from "@/styles/cart.module.css";
+import AllCategory from "./CategoryCard";
 
 export default async function Page({ searchParams }) {
   return (
@@ -20,12 +22,12 @@ export default async function Page({ searchParams }) {
             <Categories activeCategory={searchParams.s} />
           </Suspense>
         </ScrollShadow>
-        <div className="mb-6">
+        {/* <div className="mb-6">
           <div className="text-3xl">Menu</div>
           {!!searchParams.s && (
             <span className="text-lg text-gray-500">{searchParams.s}</span>
           )}
-        </div>
+        </div> */}
 
         <Suspense fallback={<ProductSkeleton />}>
           <ProductSection category={searchParams.s} />
@@ -45,11 +47,15 @@ const Categories = async ({ activeCategory }) => {
       <AllCategory isActive={!activeCategory} />
       {categoriesData?.length > 0 ? (
         categoriesData?.map((category, index) => (
-          <CategoryCard
-            category={category}
-            isActive={activeCategory == category}
+          <Link
+            href={`?s=${category}`}
+            className={`${styles.categoryCard} ${
+              activeCategory == category ? styles.activeCategory : ""
+            }`}
             key={index}
-          />
+          >
+            <div className="text-lg font-medium">{category}</div>
+          </Link>
         ))
       ) : (
         <div>No categories available</div>
@@ -58,13 +64,12 @@ const Categories = async ({ activeCategory }) => {
   );
 };
 
-const ProductSection = async ({ category }) => {
-  const productData = await getProducts(category);
+const ProductSection = async () => {
+  const productData = await getProducts();
+
   return (
     <ScrollShadow className="w-full flex-grow" hideScrollBar>
-      <div className="flex flex-wrap gap-3">
-        <Products productData={productData} />
-      </div>
+      <Products productData={productData} />
     </ScrollShadow>
   );
 };
@@ -80,14 +85,24 @@ const CategorySkeleton = () => (
   </div>
 );
 
-const ProductSkeleton = () => (
+export const ProductSkeleton = () => (
   <ScrollShadow className="w-full flex-grow" hideScrollBar>
     <div className="flex flex-wrap gap-3">
-      {[...Array(8)].map((_, index) => (
-        <div
-          key={index}
-          className="w-32 h-40 bg-gray-200 animate-pulse rounded-md"
-        ></div>
+      {[...Array(5)].map((_, index) => (
+        <Card key={index}>
+          <div
+            className="w-[250px] space-y-6 p-4  flex flex-col items-center"
+            radius="lg"
+            key={index}
+          >
+            <Skeleton className="w-4/5 rounded-lg">
+              <div className="h-3 w-4/5 rounded-lg bg-default-200" />
+            </Skeleton>
+            <Skeleton className="w-2/5 rounded-lg">
+              <div className="h-3 w-2/5 rounded-lg bg-default-300" />
+            </Skeleton>
+          </div>
+        </Card>
       ))}
     </div>
   </ScrollShadow>
